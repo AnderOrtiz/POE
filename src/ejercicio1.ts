@@ -1,58 +1,28 @@
 /**
- * 📋 Registro de Asistencia a Eventos
-    Enunciado: Crea un molde para registrar a los asistentes de un seminario de la universidad.
-    El nombre y la carrera son obligatorios, pero el correo electrónico y 
-    el número de asiento asignado son opcionales. 
-    Crea dos asistentes (uno con datos completos y otro sin los opcionales) y 
-    usa condicionales para imprimirlos de forma limpia.
+ * Enunciado: Dado un arreglo de productos con nombre y precio,
+ * usa .map() para crear un nuevo arreglo que 
+ * incluya un descuento del 10% a cada precio.
 
-interface Asistente {
-    nombre: string;
-    carrera: string;
-    email?: string;
-    asiento?: number;
-}
+    // Datos de entrada
+    const productos = [
+        { nombre: "Laptop", precio: 800 },
+        { nombre: "Mouse", precio: 25 },
+        { nombre: "Teclado", precio: 60 }
+    ];
 
-🎯 Objetivo: Practicar interfaces, propiedades opcionales y condicionales.
+    // TODO: Usar .map() para aplicar descuento del 10%
+    // Resultado esperado: [{ nombre: "Laptop", precio: 720 }, ...]
  */
 
-interface IAsistente {
-    nombre: string;
-    carrera: string;
-    email?: string;
-    asiento?: number;
-}
+const productos = [
+    { nombre: "Laptop", precio: 800 },
+    { nombre: "Mouse", precio: 25 },
+    { nombre: "Teclado", precio: 60 }
+],
 
-const asistente1: IAsistente = {
-    nombre: "Barbara Gordon",
-    carrera: "Doctorado (Ph.D.)",
-    email: "batgirl@univo.edu.gotham",
-    asiento: 3
-};
+    productos_con_descuento = productos.map(producto => {
+        producto.precio *= 0.90
+        return producto;
+    })
 
-const asistente2: IAsistente = {
-    nombre: "Dick Grayson",
-    carrera: "Licenciatura en Criminología",
-}
-
-function pintAsistenteInfo(asistente: IAsistente): void {
-    console.log('\n');
-
-    console.log(`Nombre del asistente: ${asistente.nombre}`);
-    console.log(`Carrera del asistente: ${asistente.carrera}`);
-
-    if (asistente.email) {
-        console.log(`Email: ${asistente.email}`);
-    } else {
-        console.log("Email: No Email");
-    }
-
-    if (asistente.asiento) {
-        console.log(`Asiento: ${asistente.asiento}`);
-    } else {
-        console.log("Asiento: Sin reservar");
-    }
-}
-
-pintAsistenteInfo(asistente1);
-pintAsistenteInfo(asistente2);
+console.log(`Estos son los productos con el 10% de decuento aplicado:\n`, productos_con_descuento)

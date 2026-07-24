@@ -1,37 +1,25 @@
 /**
- * 🎟️ Calculadora de Entradas Universitarias
-Enunciado: Crea una función flecha que calcule el precio de la entrada a un evento universitario. 
-La función debe recibir obligatoriamente el precio base y el tipo de boleto ("GENERAL" o "VIP"). 
-Además, debe recibir un código de descuento de estudiante que es opcional.
+ * Enunciado: Dado un objeto que representa un evento, 
+ * usa desestructuración para extraer sus 
+ * propiedades en variables individuales.
 
-Si el boleto es "VIP" se le suman $20 al costo.
-Si el usuario pasa el código opcional "ESTUDIANTE", se le aplica un 50% de descuento al total.
-// Función flecha
-const calcularPrecio = (precioBase: number, tipo: string, codigo?: string) => {
-  //TODO: Implementar lógica
-};
+// Objeto de evento
+const evento = {
+    tipo: "CLICK",
+    coordenadas: { x: 100, y: 200 },
+    usuario: "Ana"
+    };
 
-🎯 Objetivo: Practicar funciones flecha, parámetros opcionales, condicionales y operadores lógicos.
+// TODO: Desestructurar en: tipo, x, y, usuario
  */
 
-const calcularPrecio = (precioBase: number, tipo: "GENERAL" | "VIP", codigo?: string): number => {
-    let precio: number = precioBase;
+const evento = {
+    tipo: "CLICK",
+    coordenadas: { x: 100, y: 200 },
+    usuario: "Ana"
+};
 
-    if (tipo === "VIP") precio += 20;
+const { tipo, coordenadas, usuario } = evento,
+    { x, y } = coordenadas
 
-    if (codigo === "ESTUDIANTE") {
-        precio = precio * (1 - 0.5);
-    }
-
-    return precio
-}
-
-const estudiante3 = calcularPrecio(20, "GENERAL")
-const estudiante1 = calcularPrecio(20, "GENERAL", "ESTUDIANTE")
-const estudiante2 = calcularPrecio(20, "VIP")
-const estudiante4 = calcularPrecio(20, "VIP", "ESTUDIANTE")
-
-console.log(`El precio a pagar es de: ${ estudiante3 }`);
-console.log(`El precio a pagar es de: ${ estudiante1 }`);
-console.log(`El precio a pagar es de: ${ estudiante2 }`);
-console.log(`El precio a pagar es de: ${ estudiante4 }`);
+console.log({ tipo, x, y, usuario })
