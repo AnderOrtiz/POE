@@ -73,9 +73,9 @@ const DOM = {
 // heroes guarda la lista completa; idCounter genera un id distinto
 // para cada héroe nuevo (nunca se repite, siempre sube).
 
-let heroes: Heroe[] = [];
-let idCounter: number = 1;       // Contador para asignar IDs únicos
-let filtroActual: string = 'todos';
+let heroes: Heroe[] = [],
+    idCounter: number = 1,      // Contador para asignar IDs únicos
+    filtroActual: string = 'todos';
 
 // ================================================================
 // PASO 4: ACTUALIZAR EL CONTADOR EN PANTALLA
@@ -213,8 +213,7 @@ function renderizarHeroes(): void {
                     data-id="${heroe.id}">
                     ${heroe.esFavorito
                 ? 'Quitar de favoritos'
-                : 'Marcar como favorito'
-            }
+                : 'Marcar como favorito'}
                 </button>
 
             </div>
@@ -417,6 +416,15 @@ function editarNombreHeroe(
             return;
         }
 
+        const duplicado = heroes.find(h => h.nombre == input.value)
+
+        if (duplicado) {
+            actualizarEstado('No puede haber héroes duplicados');
+            input.focus();
+            input.select();
+            return;
+        }
+
         guardado = true;
 
         guardarNombreHeroe(id, input.value);
@@ -457,7 +465,6 @@ function setupBotonesHeroe(): void {
         const btnEliminar = target.closest('.btn-eliminar');
 
         if (btnEliminar) {
-
             const id = parseInt(
                 btnEliminar.getAttribute('data-id') || '0'
             );
@@ -477,7 +484,6 @@ function setupBotonesHeroe(): void {
         const btnFavorito = target.closest('.btn-favorito');
 
         if (btnFavorito) {
-
             const id = parseInt(
                 btnFavorito.getAttribute('data-id') || '0'
             );
@@ -497,7 +503,6 @@ function setupBotonesHeroe(): void {
         const nombreHeroe = target.closest('.editable-name');
 
         if (nombreHeroe instanceof HTMLElement) {
-
             const id = parseInt(
                 nombreHeroe.getAttribute('data-id') || '0'
             );

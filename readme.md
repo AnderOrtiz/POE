@@ -16,7 +16,7 @@ git clone https://github.com/AnderOrtiz/POE.git
 
 cd POE
 
-git checkout ejercicios-clase3
+git checkout clase8
 ```
 
 ---
