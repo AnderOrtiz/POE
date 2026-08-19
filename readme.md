@@ -36,17 +36,17 @@ pnpm install
 
 ## 3. Ejecutar el proyecto
 
-Para ejecutar el proyecto se debe utilizar:
+Para ejecutar el proyecto utiliza:
 
 ```bash
 pnpm dev
 ```
 
-Este comando se encarga de transpilar el código TypeScript y mantener el proyecto actualizado mediante el modo de desarrollo.
+Este comando se encarga de transpilar el código TypeScript y activar el modo de desarrollo para que los cambios realizados en el proyecto se actualicen automáticamente.
 
 ---
 
-## 4. Abrir el HTML
+## 4. Abrir el proyecto en el navegador
 
 Después de ejecutar:
 
@@ -56,13 +56,13 @@ pnpm dev
 
 abre el archivo `index.html` utilizando **Live Server** desde Visual Studio Code.
 
-Puedes hacer clic derecho sobre `index.html` y seleccionar:
+Haz clic derecho sobre `index.html` y selecciona:
 
 ```text
 Open with Live Server
 ```
 
-Live Server abrirá el proyecto en el navegador y actualizará automáticamente la página cuando se realicen cambios en los archivos.
+Live Server abrirá el proyecto en el navegador y permitirá visualizar la aplicación mientras se realizan cambios en el código.
 
 ---
 
@@ -70,32 +70,34 @@ Live Server abrirá el proyecto en el navegador y actualizará automáticamente 
 
 ```text
 POE/
+├── src
+│   ├── app.ts
+│   └── styles.css
 ├── index.html
-├── styles.css
-├── src/
-│   └── app.ts
 ├── package.json
 ├── pnpm-lock.yaml
-└── README.md
+├── pnpm-workspace.yaml
+├── readme.md
+└── tsconfig.json
 ```
 
 ---
 
 ## Comandos principales
 
-Instalar dependencias:
+Instalar las dependencias:
 
 ```bash
 pnpm install
 ```
 
-Ejecutar el modo de desarrollo:
+Ejecutar el proyecto:
 
 ```bash
 pnpm dev
 ```
 
-Cambiar a la versión de la clase 10:
+Cambiar a la clase 10:
 
 ```bash
 git checkout clase10
@@ -103,14 +105,20 @@ git checkout clase10
 
 ---
 
-## Notas
+## Nota
 
-No es necesario ejecutar directamente el archivo TypeScript con:
+No es necesario ejecutar directamente `app.ts` con:
 
 ```bash
 pnpm exec tsx src/app.ts
 ```
 
-Este proyecto utiliza `pnpm dev` para realizar la transpilación del TypeScript y mantener el proyecto actualizado durante el desarrollo.
+Este proyecto utiliza:
 
-El archivo `index.html` debe abrirse mediante Live Server para visualizar correctamente la aplicación en el navegador.
+```bash
+pnpm dev
+```
+
+para transpilar el código TypeScript y ejecutar el entorno de desarrollo.
+
+El archivo `index.html` debe abrirse mediante **Live Server** para visualizar la aplicación en el navegador.
