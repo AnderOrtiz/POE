@@ -4,129 +4,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spider-Man: Brand New Day — Reclutamiento de Héroes</title>
-    <link rel="stylesheet" href="src/style.css">
+
+    <title>Biblioteca</title>
+
+    <link rel="stylesheet" href="./src/styles.css">
 </head>
 
 <body>
-    <div class="contenedor">
 
-        <!-- ENCABEZADO TEMÁTICO - BRAND NEW DAY -->
-        <header class="encabezado">
-            <div class="header-text">
-                <h1>Spider-Man: <span class="highlight">Brand New Day</span></h1>
-                <p>Sistema de reclutamiento para el nuevo comienzo de Peter Parker</p>
+    <header class="header">
+        <div class="header-content">
+            <div>
+                <span class="header-label">SISTEMA DE BIBLIOTECA</span>
+                <h1>Mi Biblioteca</h1>
+                <p>Administra tus libros, préstamos y devoluciones.</p>
             </div>
-        </header>
 
-        <!-- CONTENIDO PRINCIPAL -->
-        <main class="contenido">
+            <div class="header-icon">
+                📚
+            </div>
+        </div>
+    </header>
 
-            <!-- SECCIÓN DEL FORMULARIO DE REGISTRO -->
-            <section class="formulario glass-panel">
-                <h2>Reclutar para el Nuevo Comienzo</h2>
-                <p class="subtitle">Únete a Peter Parker en su nueva etapa como Spider-Man</p>
 
-                <!-- Campo Nombre / Alias -->
-                <div class="campo">
-                    <label for="txtNombre">Nombre / Alias:</label>
-                    <input type="text" id="txtNombre" maxlength="20"
-                        placeholder="Ej: Peter Parker, Miles Morales, Spider-Gwen...">
+    <main class="container">
+
+        <!-- Estadísticas -->
+        <section class="stats">
+
+            <article class="stat-card">
+                <div class="stat-icon">📚</div>
+
+                <div>
+                    <span class="stat-label">Total de libros</span>
+                    <strong id="total-libros">6</strong>
                 </div>
+            </article>
 
-                <!-- Campo Universo de Origen -->
-                <div class="campo">
-                    <label for="selectCarrera">Universo de Origen:</label>
 
-                    <select id="selectCarrera">
-                        <option value="Tierra-616">Tierra-616 — Peter Parker</option>
-                        <option value="Tierra-1610">Tierra-1610 — Miles Morales</option>
-                        <option value="Tierra-65">Tierra-65 — Spider-Gwen</option>
-                        <option value="Tierra-2026">Tierra-2026 — Spider-Man BND</option>
-                        <option value="Tierra-2212">Tierra-2212 — Frank Castle</option>
-                    </select>
+            <article class="stat-card">
+                <div class="stat-icon available">✓</div>
+
+                <div>
+                    <span class="stat-label">Disponibles</span>
+                    <strong id="libros-disponibles">6</strong>
                 </div>
+            </article>
 
-                <!-- Filtro de héroes -->
-                <div class="campo">
-                    <label for="selectFiltro">Filtrar héroes:</label>
 
-                    <select id="selectFiltro">
-                        <option value="todos">Todos</option>
-                        <option value="favoritos">Solo favoritos</option>
-                        <option value="Tierra-616">Tierra-616</option>
-                        <option value="Tierra-1610">Tierra-1610</option>
-                        <option value="Tierra-65">Tierra-65</option>
-                    </select>
+            <article class="stat-card">
+                <div class="stat-icon borrowed">📖</div>
+
+                <div>
+                    <span class="stat-label">Prestados</span>
+                    <strong id="libros-prestados">0</strong>
                 </div>
+            </article>
 
-                <!-- Botones de Acción -->
-                <div class="botones">
-                    <button id="btnAgregar" class="btn-spider">
-                        Reclutar Héroe
-                    </button>
+        </section>
 
-                    <button id="btnLimpiar" class="btn-dimension">
-                        Limpiar Campos
-                    </button>
-                </div>
 
-                <!-- Contador de héroes -->
-                <div class="hero-counter">
-                    <span class="counter-label">Héroes reclutados:</span>
-                    <span id="contadorHeroes" class="counter-number">0</span>
-                </div>
+        <!-- Mensajes -->
+        <section id="mensaje-container" class="message-container">
 
-            </section>
+            <!--
+            Ejemplo:
 
-            <!-- SECCIÓN DE MOSTRAR RESULTADOS -->
-            <section class="estudiantes glass-panel">
-                <h2>Equipo Spider-Man: Brand New Day</h2>
-                <p class="subtitle">Héroes que forman parte del nuevo comienzo</p>
+            <div class="message success">
+                <span>✓</span>
+                <p>Préstamo realizado correctamente.</p>
+            </div>
+            -->
 
-                <div class="hero-grid" id="listaEstudiantes">
-                    <!-- Los elementos se agregarán dinámicamente aquí -->
-                </div>
+        </section>
 
-                <div class="empty-state" id="emptyState">
-                    <p>Nuevo día, nuevos héroes</p>
-                    <span class="empty-sub">
-                        Recluta héroes para el Brand New Day
-                    </span>
-                </div>
 
-            </section>
+        <!-- Barra de herramientas -->
+        <section class="toolbar">
 
-        </main>
+            <div>
+                <h2>Catálogo de libros</h2>
+                <p>Explora los libros disponibles en la biblioteca.</p>
+            </div>
 
-        <!-- PIE DE PÁGINA / ESTADO -->
-        <footer class="pie">
-            <div class="footer-content">
+            <div class="filters">
 
-                <p id="estado">
-                    Estado: Esperando nuevos héroes para el Brand New Day...
-                </p>
+                <select id="filtro-categoria">
+                    <option value="TODOS">Todas las categorías</option>
+                    <option value="CIENCIA">Ciencia</option>
+                    <option value="LITERATURA">Literatura</option>
+                    <option value="HISTORIA">Historia</option>
+                    <option value="TECNOLOGIA">Tecnología</option>
+                    <option value="ARTE">Arte</option>
+                </select>
 
-                <div class="footer-details">
-                    <span>Brand New Day Protocol v1.0</span>
-
-                    <span>
-                        Universo:
-                        <span id="dimensionFooter">Tierra-616</span>
-                    </span>
-
-                    <span class="highlight-new">
-                        Un nuevo comienzo
-                    </span>
-                </div>
+                <input type="search" id="buscar-libro" placeholder="Buscar libro...">
 
             </div>
-        </footer>
 
-    </div>
+        </section>
 
-    <!-- Enlace al archivo compilado de TypeScript -->
-    <script type="module" src="dist/script.js"></script>
+
+        <!-- Lista de libros -->
+        <section id="lista-libros" class="books-grid">
+
+            <!--
+            Las tarjetas serán generadas posteriormente
+            desde GestorUIBiblioteca.
+            -->
+
+
+            <!-- Libro 1 -->
+            <article class="book-card">
+
+                <div class="book-header">
+
+                    <span class="category literatura">
+                        LITERATURA
+                    </span>
+
+                    <button class="favorite" title="Agregar a favoritos">
+                        ☆
+                    </button>
+
+                </div>
+
+
+                <div class="book-content">
+
+                    <h3>El Principito</h3>
+
+                    <p class="author">
+                        Antoine de Saint-Exupéry
+                    </p>
+
+                    <div class="book-info">
+
+                        <span>
+                            📅 1943
+                        </span>
+
+                        <span>
+                            📚 5 ejemplares
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="book-footer">
+
+                    <span class="status available-status">
+                        Disponible
+                    </span>
+
+                    <button class="btn btn-primary">
+                        Prestar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Libro 2 -->
+            <article class="book-card">
+
+                <div class="book-header">
+
+                    <span class="category literatura">
+                        LITERATURA
+                    </span>
+
+                    <button class="favorite" title="Agregar a favoritos">
+                        ☆
+                    </button>
+
+                </div>
+
+
+                <div class="book-content">
+
+                    <h3>Cien años de soledad</h3>
+
+                    <p class="author">
+                        Gabriel García Márquez
+                    </p>
+
+                    <div class="book-info">
+
+                        <span>
+                            📅 1967
+                        </span>
+
+                        <span>
+                            📚 3 ejemplares
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="book-footer">
+
+                    <span class="status available-status">
+                        Disponible
+                    </span>
+
+                    <button class="btn btn-primary">
+                        Prestar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Libro 3 -->
+            <article class="book-card">
+
+                <div class="book-header">
+
+                    <span class="category ciencia">
+                        CIENCIA
+                    </span>
+
+                    <button class="favorite" title="Agregar a favoritos">
+                        ☆
+                    </button>
+
+                </div>
+
+
+                <div class="book-content">
+
+                    <h3>Breve historia del tiempo</h3>
+
+                    <p class="author">
+                        Stephen Hawking
+                    </p>
+
+                    <div class="book-info">
+
+                        <span>
+                            📅 1988
+                        </span>
+
+                        <span>
+                            📚 2 ejemplares
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="book-footer">
+
+                    <span class="status available-status">
+                        Disponible
+                    </span>
+
+                    <button class="btn btn-primary">
+                        Prestar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Libro 4 -->
+            <article class="book-card">
+
+                <div class="book-header">
+
+                    <span class="category historia">
+                        HISTORIA
+                    </span>
+
+                    <button class="favorite" title="Agregar a favoritos">
+                        ☆
+                    </button>
+
+                </div>
+
+
+                <div class="book-content">
+
+                    <h3>El arte de la guerra</h3>
+
+                    <p class="author">
+                        Sun Tzu
+                    </p>
+
+                    <div class="book-info">
+
+                        <span>
+                            📅 500
+                        </span>
+
+                        <span>
+                            📚 4 ejemplares
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="book-footer">
+
+                    <span class="status available-status">
+                        Disponible
+                    </span>
+
+                    <button class="btn btn-primary">
+                        Prestar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Libro 5 -->
+            <article class="book-card">
+
+                <div class="book-header">
+
+                    <span class="category tecnologia">
+                        TECNOLOGÍA
+                    </span>
+
+                    <button class="favorite" title="Agregar a favoritos">
+                        ☆
+                    </button>
+
+                </div>
+
+
+                <div class="book-content">
+
+                    <h3>Clean Code</h3>
+
+                    <p class="author">
+                        Robert C. Martin
+                    </p>
+
+                    <div class="book-info">
+
+                        <span>
+                            📅 2008
+                        </span>
+
+                        <span>
+                            📚 6 ejemplares
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="book-footer">
+
+                    <span class="status available-status">
+                        Disponible
+                    </span>
+
+                    <button class="btn btn-primary">
+                        Prestar
+                    </button>
+
+                </div>
+
+            </article>
+
+
+            <!-- Libro 6 -->
+            <article class="book-card">
+
+                <div class="book-header">
+
+                    <span class="category arte">
+                        ARTE
+                    </span>
+
+                    <button class="favorite" title="Agregar a favoritos">
+                        ☆
+                    </button>
+
+                </div>
+
+
+                <div class="book-content">
+
+                    <h3>Historia del arte</h3>
+
+                    <p class="author">
+                        Ernst Gombrich
+                    </p>
+
+                    <div class="book-info">
+
+                        <span>
+                            📅 1950
+                        </span>
+
+                        <span>
+                            📚 2 ejemplares
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="book-footer">
+
+                    <span class="status available-status">
+                        Disponible
+                    </span>
+
+                    <button class="btn btn-primary">
+                        Prestar
+                    </button>
+
+                </div>
+
+            </article>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+        <p>Biblioteca &copy; 2026</p>
+    </footer>
+
+
+    <script type="module" src="dist/app.js"></script>
 
 </body>
 
