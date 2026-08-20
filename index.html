@@ -4,9 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>Biblioteca</title>
-
+    <title>Sistema de Gestión de Biblioteca - UNIVO</title>
     <link rel="stylesheet" href="./src/styles.css">
 </head>
 
@@ -15,80 +13,97 @@
     <header class="header">
         <div class="header-content">
             <div>
-                <span class="header-label">SISTEMA DE BIBLIOTECA</span>
-                <h1>Mi Biblioteca</h1>
-                <p>Administra tus libros, préstamos y devoluciones.</p>
+                <span class="header-label">BIBLIOTECA CENTRAL UNIVO</span>
+                <h1>Gestión de Préstamos</h1>
+                <p>Catálogo de libros, préstamos, devoluciones y eventos en tiempo real.</p>
             </div>
-
             <div class="header-icon">
                 📚
             </div>
         </div>
     </header>
 
-
     <main class="container">
 
-        <!-- Estadísticas -->
-        <section class="stats">
+        <!-- Formulario para agregar libros (Parte 5.1) -->
+        <section class="form-section">
+            <h2>Agregar Nuevo Libro</h2>
+            <form id="form-agregar-libro" class="book-form">
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" id="titulo" placeholder="Ej. Don Quijote de la Mancha" required />
+                </div>
 
+                <div class="form-group">
+                    <label for="autor">Autor</label>
+                    <input type="text" id="autor" placeholder="Ej. Miguel de Cervantes" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="categoria">Categoría</label>
+                    <select id="categoria" required>
+                        <option value="CIENCIA">Ciencia</option>
+                        <option value="LITERATURA" selected>Literatura</option>
+                        <option value="HISTORIA">Historia</option>
+                        <option value="TECNOLOGIA">Tecnología</option>
+                        <option value="ARTE">Arte</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="anio">Año de publicación</label>
+                    <input type="number" id="anio" placeholder="Ej. 1605" min="1" max="2026" required />
+                </div>
+
+                <div class="form-group">
+                    <label for="ejemplares">Ejemplares</label>
+                    <input type="number" id="ejemplares" placeholder="Ej. 3" min="1" value="1" required />
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-submit">
+                    ➕ Agregar Libro
+                </button>
+            </form>
+        </section>
+
+        <!-- Estadísticas y Contadores -->
+        <section class="stats">
             <article class="stat-card">
                 <div class="stat-icon">📚</div>
-
                 <div>
                     <span class="stat-label">Total de libros</span>
-                    <strong id="total-libros">6</strong>
+                    <strong id="total-libros">0</strong>
                 </div>
             </article>
-
 
             <article class="stat-card">
                 <div class="stat-icon available">✓</div>
-
                 <div>
                     <span class="stat-label">Disponibles</span>
-                    <strong id="libros-disponibles">6</strong>
+                    <strong id="libros-disponibles">0</strong>
                 </div>
             </article>
 
-
             <article class="stat-card">
                 <div class="stat-icon borrowed">📖</div>
-
                 <div>
                     <span class="stat-label">Prestados</span>
                     <strong id="libros-prestados">0</strong>
                 </div>
             </article>
-
         </section>
 
+        <!-- Área de Mensajes de Notificación -->
+        <section id="mensaje-container" class="message-container"></section>
 
-        <!-- Mensajes -->
-        <section id="mensaje-container" class="message-container">
-
-            <!--
-            Ejemplo:
-
-            <div class="message success">
-                <span>✓</span>
-                <p>Préstamo realizado correctamente.</p>
-            </div>
-            -->
-
-        </section>
-
-
-        <!-- Barra de herramientas -->
+        <!-- Barra de Herramientas, Filtros y Ordenamiento -->
         <section class="toolbar">
-
             <div>
-                <h2>Catálogo de libros</h2>
-                <p>Explora los libros disponibles en la biblioteca.</p>
+                <h2>Catálogo de Libros</h2>
+                <p>Explora y administra el inventario activo.</p>
             </div>
 
             <div class="filters">
-
                 <select id="filtro-categoria">
                     <option value="TODOS">Todas las categorías</option>
                     <option value="CIENCIA">Ciencia</option>
@@ -98,356 +113,36 @@
                     <option value="ARTE">Arte</option>
                 </select>
 
-                <input type="search" id="buscar-libro" placeholder="Buscar libro...">
+                <input type="search" id="buscar-libro" placeholder="Buscar por título o autor...">
 
+                <div class="sort-buttons">
+                    <button id="btn-orden-titulo" class="btn btn-outline" type="button">
+                        Título
+                    </button>
+                    <button id="btn-orden-autor" class="btn btn-outline" type="button">
+                        Autor
+                    </button>
+                    <button id="btn-solo-disponibles" class="btn btn-outline" type="button">
+                        Disponibles
+                    </button>
+                    <button id="btn-solo-favoritos" class="btn btn-outline" type="button">
+                        Favoritos
+                    </button>
+                </div>
             </div>
-
         </section>
 
-
-        <!-- Lista de libros -->
-        <section id="lista-libros" class="books-grid">
-
-            <!--
-            Las tarjetas serán generadas posteriormente
-            desde GestorUIBiblioteca.
-            -->
-
-
-            <!-- Libro 1 -->
-            <article class="book-card">
-
-                <div class="book-header">
-
-                    <span class="category literatura">
-                        LITERATURA
-                    </span>
-
-                    <button class="favorite" title="Agregar a favoritos">
-                        ☆
-                    </button>
-
-                </div>
-
-
-                <div class="book-content">
-
-                    <h3>El Principito</h3>
-
-                    <p class="author">
-                        Antoine de Saint-Exupéry
-                    </p>
-
-                    <div class="book-info">
-
-                        <span>
-                            📅 1943
-                        </span>
-
-                        <span>
-                            📚 5 ejemplares
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="book-footer">
-
-                    <span class="status available-status">
-                        Disponible
-                    </span>
-
-                    <button class="btn btn-primary">
-                        Prestar
-                    </button>
-
-                </div>
-
-            </article>
-
-
-            <!-- Libro 2 -->
-            <article class="book-card">
-
-                <div class="book-header">
-
-                    <span class="category literatura">
-                        LITERATURA
-                    </span>
-
-                    <button class="favorite" title="Agregar a favoritos">
-                        ☆
-                    </button>
-
-                </div>
-
-
-                <div class="book-content">
-
-                    <h3>Cien años de soledad</h3>
-
-                    <p class="author">
-                        Gabriel García Márquez
-                    </p>
-
-                    <div class="book-info">
-
-                        <span>
-                            📅 1967
-                        </span>
-
-                        <span>
-                            📚 3 ejemplares
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="book-footer">
-
-                    <span class="status available-status">
-                        Disponible
-                    </span>
-
-                    <button class="btn btn-primary">
-                        Prestar
-                    </button>
-
-                </div>
-
-            </article>
-
-
-            <!-- Libro 3 -->
-            <article class="book-card">
-
-                <div class="book-header">
-
-                    <span class="category ciencia">
-                        CIENCIA
-                    </span>
-
-                    <button class="favorite" title="Agregar a favoritos">
-                        ☆
-                    </button>
-
-                </div>
-
-
-                <div class="book-content">
-
-                    <h3>Breve historia del tiempo</h3>
-
-                    <p class="author">
-                        Stephen Hawking
-                    </p>
-
-                    <div class="book-info">
-
-                        <span>
-                            📅 1988
-                        </span>
-
-                        <span>
-                            📚 2 ejemplares
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="book-footer">
-
-                    <span class="status available-status">
-                        Disponible
-                    </span>
-
-                    <button class="btn btn-primary">
-                        Prestar
-                    </button>
-
-                </div>
-
-            </article>
-
-
-            <!-- Libro 4 -->
-            <article class="book-card">
-
-                <div class="book-header">
-
-                    <span class="category historia">
-                        HISTORIA
-                    </span>
-
-                    <button class="favorite" title="Agregar a favoritos">
-                        ☆
-                    </button>
-
-                </div>
-
-
-                <div class="book-content">
-
-                    <h3>El arte de la guerra</h3>
-
-                    <p class="author">
-                        Sun Tzu
-                    </p>
-
-                    <div class="book-info">
-
-                        <span>
-                            📅 500
-                        </span>
-
-                        <span>
-                            📚 4 ejemplares
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="book-footer">
-
-                    <span class="status available-status">
-                        Disponible
-                    </span>
-
-                    <button class="btn btn-primary">
-                        Prestar
-                    </button>
-
-                </div>
-
-            </article>
-
-
-            <!-- Libro 5 -->
-            <article class="book-card">
-
-                <div class="book-header">
-
-                    <span class="category tecnologia">
-                        TECNOLOGÍA
-                    </span>
-
-                    <button class="favorite" title="Agregar a favoritos">
-                        ☆
-                    </button>
-
-                </div>
-
-
-                <div class="book-content">
-
-                    <h3>Clean Code</h3>
-
-                    <p class="author">
-                        Robert C. Martin
-                    </p>
-
-                    <div class="book-info">
-
-                        <span>
-                            📅 2008
-                        </span>
-
-                        <span>
-                            📚 6 ejemplares
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="book-footer">
-
-                    <span class="status available-status">
-                        Disponible
-                    </span>
-
-                    <button class="btn btn-primary">
-                        Prestar
-                    </button>
-
-                </div>
-
-            </article>
-
-
-            <!-- Libro 6 -->
-            <article class="book-card">
-
-                <div class="book-header">
-
-                    <span class="category arte">
-                        ARTE
-                    </span>
-
-                    <button class="favorite" title="Agregar a favoritos">
-                        ☆
-                    </button>
-
-                </div>
-
-
-                <div class="book-content">
-
-                    <h3>Historia del arte</h3>
-
-                    <p class="author">
-                        Ernst Gombrich
-                    </p>
-
-                    <div class="book-info">
-
-                        <span>
-                            📅 1950
-                        </span>
-
-                        <span>
-                            📚 2 ejemplares
-                        </span>
-
-                    </div>
-
-                </div>
-
-
-                <div class="book-footer">
-
-                    <span class="status available-status">
-                        Disponible
-                    </span>
-
-                    <button class="btn btn-primary">
-                        Prestar
-                    </button>
-
-                </div>
-
-            </article>
-
-        </section>
+        <!-- Contenedor Dinámico para Tarjetas de Libros -->
+        <section id="lista-libros" class="books-grid"></section>
 
     </main>
 
-
     <footer>
-        <p>Biblioteca &copy; 2026</p>
+        <p>Biblioteca Central &copy; Universidad de Oriente (UNIVO)</p>
     </footer>
 
-
-    <script type="module" src="dist/app.js"></script>
+    <!-- Script transpilado por tsc -->
+    <script type="module" src="./dist/app.js"></script>
 
 </body>
 
