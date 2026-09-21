@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 13, "column": 0}, "map": {"version":3,"sources":["file:///home/stanmqz/Universidad/Ciclo%202%20-%202026/POE/NextJS/taskapp/app/favicon.ico.mjs%20(structured%20image%20object)"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 256, height: 256 }\n"],"names":["src","width","height"],"mappings":";;;;AAAA;;uCACe;IAAEA,KAAAA,mIAAG;IAAEC,OAAO;IAAKC,QAAQ;AAAI"}},
+    {"offset": {"line": 28, "column": 0}, "map": {"version":3,"sources":["file:///home/stanmqz/Universidad/Ciclo%202%20-%202026/POE/NextJS/taskapp/app/tasks/page.tsx"],"sourcesContent":["export default function TaskPage(){\n    return(\n        <main>\n            <h1>Tareas</h1>\n            <p>Aqui apareceran nuestras tareas</p>\n        </main>\n    )\n}"],"names":["TaskPage"],"mappings":";;;;;;AAAe,SAASA;IACpB,qBACI,8OAAC;;0BACG,8OAAC;0BAAG;;;;;;0BACJ,8OAAC;0BAAE;;;;;;;;;;;;AAGf"}}]
+}

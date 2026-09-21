@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 13, "column": 0}, "map": {"version":3,"sources":["file:///home/stanmqz/Universidad/Ciclo%202%20-%202026/POE/NextJS/taskapp/app/favicon.ico.mjs%20(structured%20image%20object)"],"sourcesContent":["import src from \"IMAGE\";\nexport default { src, width: 256, height: 256 }\n"],"names":["src","width","height"],"mappings":";;;;AAAA;;uCACe;IAAEA,KAAAA,mIAAG;IAAEC,OAAO;IAAKC,QAAQ;AAAI"}},
+    {"offset": {"line": 28, "column": 0}, "map": {"version":3,"sources":["file:///home/stanmqz/Universidad/Ciclo%202%20-%202026/POE/NextJS/taskapp/app/page.tsx"],"sourcesContent":["export default function Home() {\n  return (\n    <>\n      <main>\n        <h1>App de Tareas</h1>\n        <p>最初のネツジスアプリです</p>\n        <p>Mi primer aplicacion con Next.js</p>\n      </main>\n    </>\n  );\n}\n"],"names":["Home"],"mappings":";;;;;;AAAe,SAASA;IACtB,qBACE;kBACE,cAAA,8OAAC;;8BACC,8OAAC;8BAAG;;;;;;8BACJ,8OAAC;8BAAE;;;;;;8BACH,8OAAC;8BAAE;;;;;;;;;;;;;;;;;AAIX"}}]
+}
