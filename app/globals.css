@@ -1,0 +1,198 @@
+/* El selector body selecciona todo el cuerpo de nuestra página */
+body {
+  /* Quitamos el margen que el navegador coloca automáticamente */
+  margin: 0;
+
+  /* Elegimos una fuente sencilla y moderna */
+  font-family: Arial, sans-serif;
+
+  /* Definimos un fondo oscuro */
+  background: #111827;
+
+  /* El color general del texto será blanco */
+  color: white;
+}
+
+/* Estilizamos el elemento main */
+main {
+  /* "Como mínimo, ocupar toda la altura visible de la pantalla" */
+  min-height: 100vh;
+
+  /* Activamos Flexbox */
+  display: flex;
+
+  /* Colocamos los elementos uno debajo del otro */
+  flex-direction: column;
+
+  /* Centramos horizontalmente */
+  align-items: center;
+
+  /* Centramos verticalmente */
+  justify-content: center;
+
+  /* Centramos el texto */
+  text-align: center;
+}
+
+h1 {
+  /* Aumentamos el tamaño del título */
+  font-size: 3rem;
+
+  /* Eliminamos el margen superior predeterminado */
+  margin: 0;
+
+  /* Color amarillo */
+  color: #facc15;
+}
+
+/* Creamos una animación llamada "brillar" */
+@keyframes brillar {
+
+  /* Estado inicial */
+  0% {
+    transform: scale(1);
+  }
+
+  /* La hacemos ligeramente más grande */
+  50% {
+    transform: scale(1.05);
+  }
+
+  /* Regresamos al tamaño original */
+  100% {
+    transform: scale(1);
+  }
+}
+
+h1 {
+  font-size: 3rem;
+  margin: 0;
+  color: #facc15;
+
+  /* Aplicamos la animación "brillar" */
+  /* 2s = duración, infinite = se repite indefinidamente */
+  animation: brillar 2s infinite;
+}
+
+/* Contenedor principal de la flor */
+.flower {
+  /* Definimos el tamaño de la flor */
+  width: 180px;
+  height: 180px;
+
+  /* Permitimos posicionar los pétalos con posiciones absolutas */
+  position: relative;
+
+  /* Separación respecto al texto */
+  margin-top: 40px;
+}
+
+/* Estilos generales de todos los pétalos */
+.petal {
+  /* Todos los pétalos tendrán la misma medida */
+  width: 80px;
+  height: 100px;
+
+  /* Los convertimos en una forma ovalada */
+  border-radius: 50%;
+
+  /* Color amarillo */
+  background: #facc15;
+
+  /* Permitimos posicionarlos libremente dentro de .flower */
+  position: absolute;
+
+  /* Centramos el punto de referencia */
+  left: 50%;
+  top: 50%;
+
+  /* El translate mueve el pétalo para que su centro coincida */
+  transform: translate(-50%, -50%);
+}
+
+/* Pétalo superior */
+.petal-top {
+  transform: translate(-50%, -90%) rotate(0deg);
+}
+
+/* Pétalo derecho */
+.petal-right {
+  transform: translate(0%, -50%) rotate(90deg);
+}
+
+/* Pétalo inferior */
+.petal-bottom {
+  transform: translate(-50%, 0%) rotate(180deg);
+}
+
+/* Pétalo izquierdo */
+.petal-left {
+  transform: translate(-100%, -50%) rotate(270deg);
+}
+
+.flower-center {
+  /* Tamaño del centro */
+  width: 55px;
+  height: 55px;
+
+  /* Color marrón oscuro */
+  background: #78350f;
+
+  /* Lo convertimos en un círculo */
+  border-radius: 50%;
+
+  /* Lo colocamos exactamente en el centro de la flor */
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+
+  /* Colocamos el centro por encima de los pétalos */
+  z-index: 10;
+}
+
+@keyframes aparecerFlor {
+
+  /* Empieza invisible y pequeña */
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  /* Crece hasta su tamaño normal */
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.flower {
+  width: 180px;
+  height: 180px;
+  position: relative;
+  margin-top: 40px;
+
+  /* Animación de aparición */
+  animation: aparecerFlor 1.5s ease-out;
+}
+
+/* Contenedor de todas las flores */
+.garden {
+  /* Flexbox nos permitirá colocar las flores una junto a otra */
+  display: flex;
+
+  /* Permitimos que las flores bajen a otra línea si no caben */
+  flex-wrap: wrap;
+
+  /* Centramos las flores */
+  justify-content: center;
+
+  /* Espacio entre las flores */
+  gap: 20px;
+
+  /* Margen superior */
+  margin-top: 30px;
+
+  /* Limitamos el ancho del jardín */
+  max-width: 1000px;
+}
