@@ -1,0 +1,384 @@
+/* Paleta EVA-01: morado y verde, con naranja para las acciones de borrado */
+:root {
+	--bg: #120a1c;
+	--surface: #1e1230;
+	--surface-alt: #2a1a42;
+	--border: #3d2a5c;
+	--purple: #7b4fc4;
+	--purple-light: #a98be0;
+	--green: #8fe04a;
+	--green-dim: #5c9a2b;
+	--orange: #ff8a3d;
+	--text: #ece6f7;
+	--text-muted: #9a8bb5;
+	--radius: 14px;
+}
+
+* {
+	box-sizing: border-box;
+}
+
+body {
+	margin: 0;
+	min-height: 100vh;
+	padding: 48px 16px;
+	font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+	color: var(--text);
+	background:
+		radial-gradient(circle at 15% 0%, rgba(123, 79, 196, 0.35), transparent 45%),
+		radial-gradient(circle at 90% 100%, rgba(143, 224, 74, 0.12), transparent 40%),
+		var(--bg);
+	background-attachment: fixed;
+}
+
+button,
+input {
+	font: inherit;
+	color: inherit;
+}
+
+button {
+	cursor: pointer;
+}
+
+:focus-visible {
+	outline: 2px solid var(--green);
+	outline-offset: 2px;
+}
+
+.hidden {
+	display: none;
+}
+
+.app {
+	max-width: 620px;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+/* ===== Encabezado ===== */
+.app-header {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	align-items: end;
+	gap: 0 16px;
+	padding-left: 16px;
+	border-left: 4px solid var(--green);
+}
+
+.app-tag {
+	grid-column: 1 / -1;
+	margin: 0;
+	font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+	font-size: 12px;
+	letter-spacing: 0.2em;
+	text-transform: uppercase;
+	color: var(--green);
+}
+
+.app-header h1 {
+	margin: 0;
+	font-size: 48px;
+	font-weight: 800;
+	line-height: 1.1;
+	letter-spacing: -0.02em;
+	background: linear-gradient(90deg, var(--purple-light), var(--green));
+	-webkit-background-clip: text;
+	background-clip: text;
+	color: transparent;
+}
+
+.todo-count {
+	margin: 0 0 8px;
+	font-size: 14px;
+	color: var(--text-muted);
+}
+
+.todo-count strong {
+	font-size: 20px;
+	color: var(--green);
+}
+
+/* ===== Tarjetas ===== */
+.card {
+	background: var(--surface);
+	border: 1px solid var(--border);
+	border-radius: var(--radius);
+	box-shadow: 0 20px 40px rgba(0, 0, 0, 0.35);
+	overflow: hidden;
+}
+
+/* ===== Formulario ===== */
+.new-todo-form {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	padding: 20px;
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.field span {
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--purple-light);
+}
+
+.field input,
+.search-input {
+	width: 100%;
+	padding: 12px 14px;
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	background: var(--bg);
+	transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.field input::placeholder,
+.search-input::placeholder {
+	color: var(--text-muted);
+	opacity: 0.7;
+}
+
+.field input:focus,
+.search-input:focus {
+	outline: none;
+	border-color: var(--green);
+	box-shadow: 0 0 0 3px rgba(143, 224, 74, 0.2);
+}
+
+.btn-primary {
+	padding: 12px 18px;
+	border: none;
+	border-radius: 10px;
+	font-weight: 700;
+	color: #14230a;
+	background: var(--green);
+	transition: transform 0.1s, box-shadow 0.2s, background 0.2s;
+}
+
+.btn-primary:hover {
+	background: #a4ee63;
+	box-shadow: 0 0 20px rgba(143, 224, 74, 0.4);
+}
+
+.btn-primary:active {
+	transform: translateY(1px);
+}
+
+/* ===== Mensajes ===== */
+.mensaje {
+	padding: 12px 16px;
+	border: 1px solid;
+	border-radius: 10px;
+	font-size: 15px;
+	text-align: center;
+}
+
+.mensaje.exito {
+	color: var(--green);
+	border-color: var(--green-dim);
+	background: rgba(143, 224, 74, 0.1);
+}
+
+.mensaje.error {
+	color: var(--orange);
+	border-color: var(--orange);
+	background: rgba(255, 138, 61, 0.1);
+}
+
+/* ===== Búsqueda y filtros ===== */
+.toolbar {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 16px 20px;
+	border-bottom: 1px solid var(--border);
+	background: var(--surface-alt);
+}
+
+.filters {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.filtro {
+	padding: 6px 14px;
+	border: 1px solid var(--border);
+	border-radius: 999px;
+	font-size: 14px;
+	color: var(--text-muted);
+	background: transparent;
+	transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.filtro:hover {
+	color: var(--text);
+	border-color: var(--purple);
+}
+
+.filtro.selected {
+	color: #fff;
+	border-color: var(--purple);
+	background: var(--purple);
+}
+
+/* ===== Lista de tareas ===== */
+.todo-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.todo-list li {
+	border-bottom: 1px solid var(--border);
+	cursor: pointer;
+	transition: background 0.2s;
+}
+
+.todo-list li:hover {
+	background: rgba(123, 79, 196, 0.12);
+}
+
+.todo-list li .view {
+	display: flex;
+	align-items: flex-start;
+	gap: 14px;
+	padding: 16px 20px;
+}
+
+.todo-list li .toggle {
+	appearance: none;
+	-webkit-appearance: none;
+	flex-shrink: 0;
+	width: 22px;
+	height: 22px;
+	margin: 2px 0 0;
+	border: 2px solid var(--purple);
+	border-radius: 50%;
+	cursor: pointer;
+	transition: background 0.2s, border-color 0.2s;
+}
+
+.todo-list li .toggle:checked {
+	border-color: var(--green);
+	background: var(--green) url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%2314230a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>') center / 14px no-repeat;
+}
+
+.todo-list li label {
+	flex: 1;
+	min-width: 0;
+	overflow-wrap: anywhere;
+	cursor: pointer;
+}
+
+.todo-list li label .titulo {
+	display: block;
+	font-weight: 600;
+}
+
+.todo-list li label .descripcion {
+	display: block;
+	margin-top: 2px;
+	font-size: 14px;
+	color: var(--text-muted);
+}
+
+.todo-list li.completed label .titulo {
+	color: var(--text-muted);
+	text-decoration: line-through;
+	text-decoration-color: var(--green-dim);
+}
+
+.todo-list li.completed label .descripcion {
+	opacity: 0.6;
+}
+
+.todo-list li .destroy {
+	flex-shrink: 0;
+	width: 30px;
+	height: 30px;
+	border: none;
+	border-radius: 8px;
+	font-size: 22px;
+	line-height: 1;
+	color: var(--text-muted);
+	background: transparent;
+	opacity: 0;
+	transition: opacity 0.2s, color 0.2s, background 0.2s;
+}
+
+.todo-list li .destroy::after {
+	content: '×';
+}
+
+.todo-list li:hover .destroy,
+.todo-list li .destroy:focus-visible {
+	opacity: 1;
+}
+
+.todo-list li .destroy:hover {
+	color: var(--orange);
+	background: rgba(255, 138, 61, 0.15);
+}
+
+.todo-list li.vacio {
+	padding: 36px 20px;
+	text-align: center;
+	color: var(--text-muted);
+	cursor: default;
+}
+
+.todo-list li.vacio:hover {
+	background: transparent;
+}
+
+/* ===== Pie de la tarjeta ===== */
+.card-footer {
+	display: flex;
+	justify-content: flex-end;
+	padding: 12px 20px;
+	background: var(--surface-alt);
+}
+
+.clear-completed {
+	padding: 6px 12px;
+	border: 1px solid transparent;
+	border-radius: 8px;
+	font-size: 14px;
+	color: var(--text-muted);
+	background: transparent;
+	transition: color 0.2s, border-color 0.2s;
+}
+
+.clear-completed:hover {
+	color: var(--orange);
+	border-color: var(--orange);
+}
+
+@media (hover: none) {
+	.todo-list li .destroy {
+		opacity: 1;
+	}
+}
+
+@media (max-width: 480px) {
+	body {
+		padding: 24px 12px;
+	}
+
+	.app-header h1 {
+		font-size: 36px;
+	}
+}
