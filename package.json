@@ -16,9 +16,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
-    "watch": "tsc --watch",
-    "dev": "tsc --watch --preserveWatchOutput & python3 -m http.server 8000"
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",
