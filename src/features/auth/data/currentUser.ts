@@ -8,7 +8,7 @@ export interface CurrentUser {
 }
 
 export const currentUser: CurrentUser = {
-    name: "Carlos M.",
+    name: "Anderson Ortiz",
     team: "SRE",
     level: "Lead",
 };

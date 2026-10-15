@@ -1,8 +1,3 @@
-// Define el contrato (tipo o interfaz) antes de los datos. El orden es:
-
-// Escribes la interfaz que describe un item de navegación.
-// Declaras la constante exportada, un arreglo de esos items, indicando su tipo.
-
 export interface NavigationItem {
     id: string;
     label: string;
