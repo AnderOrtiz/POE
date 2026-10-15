@@ -1,81 +1,32 @@
-# Gestor de tareas
+# React + TypeScript + Vite
 
-Aplicación para gestionar una lista de tareas personales con estados (pendiente/completada), hecha con TypeScript sin frameworks ni bundlers.
+This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
-## Funcionalidades
+Currently, two official plugins are available:
 
-- Registrar tareas con título y descripción.
-- Marcar tareas como completadas o pendientes.
-- Buscar tareas por título.
-- Eliminar tareas con confirmación.
-- Filtrar por estado (todas, pendientes, completadas).
-- Los datos se guardan en `localStorage`.
+- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
+- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
 
-## Requisitos
+## React Compiler
 
-- [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/) 20 o superior (incluye `npm`)
-- [Visual Studio Code](https://code.visualstudio.com/) con la extensión [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-### ¿Qué es Live Server?
+## Expanding the Oxlint configuration
 
-Live Server es una extensión de VS Code que levanta un servidor local para abrir páginas HTML y recarga el navegador automáticamente cada vez que cambia un archivo. Se instala desde VS Code: abrir el panel de extensiones (`Ctrl+Shift+X`, o `Cmd+Shift+X` en macOS), buscar "Live Server" (de Ritwick Dey) y pulsar **Install**.
+If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
 
-## Cómo obtener el proyecto
-
-```bash
-git clone https://github.com/AnderOrtiz/POE.git
-cd POE
-git checkout clase23
+```json
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["react", "typescript", "oxc"],
+  "options": {
+    "typeAware": true
+  },
+  "rules": {
+    "react/rules-of-hooks": "error",
+    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+  }
+}
 ```
 
-## Cómo ejecutarlo
-
-1. Instalar las dependencias:
-
-   ```bash
-   npm install
-   ```
-
-2. Compilar el proyecto:
-
-   ```bash
-   npm run build
-   ```
-
-   Esto genera la carpeta `dist/` con el JavaScript que usa el navegador. Hay que volver a ejecutarlo cada vez que se cambie un archivo `.ts`.
-
-3. Abrir la carpeta del proyecto en VS Code, hacer click derecho sobre `index.html` y elegir **Open with Live Server** (o pulsar **Go Live** en la barra inferior).
-
-El navegador se abre solo con la aplicación (normalmente en <http://127.0.0.1:5500/index.html>). Después de cada `npm run build`, Live Server recarga la página.
-
-> Abrir `index.html` con doble click no funciona: el navegador bloquea los módulos de JavaScript en `file://`, por eso se necesita Live Server.
-
-## Scripts
-
-| Comando | Qué hace |
-|---|---|
-| `npm run build` | Compila `src/*.ts` a `dist/*.js` una sola vez. |
-
-## Estructura
-
-```
-POE/
-├── src
-│   ├── controllers
-│   │   └── tarea.controller.ts
-│   ├── models
-│   │   └── tarea.model.ts
-│   ├── services
-│   │   └── storage.service.ts
-│   ├── views
-│   │   ├── app.template.ts
-│   │   └── tarea.view.ts
-│   ├── main.ts
-│   └── style.css
-├── index.html
-├── package-lock.json
-├── package.json
-├── readme.md
-└── tsconfig.json
-```
+See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
