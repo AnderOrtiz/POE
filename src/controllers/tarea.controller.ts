@@ -1,4 +1,4 @@
-import { Filtros, Tarea, type Filtro } from '../models/tarea.model.js';
+import { FiltrosEstados, Tarea, type Filtro } from '../models/tarea.model.js';
 import { StorageService } from '../services/storage.service.js';
 import { TareaView } from '../views/tarea.view.js';
 
@@ -13,7 +13,7 @@ export class TareaController {
     ) {
         const estado = this.storage.cargar();
         this.tareas = estado.tareas;
-        this.filtro = estado.filtro;
+        this.filtro = estado.filtroEstado;
 
         this.view.onAgregar((titulo, descripcion) => this.agregar(titulo, descripcion));
         this.view.onEliminar(tareaId => this.eliminar(tareaId));
@@ -43,7 +43,7 @@ export class TareaController {
     public eliminar(tareaId: string): void {
         const tarea = this.tareas.find(tarea => tarea.id === tareaId);
         if (!tarea) return;
-        if (!this.view.confirmar(`¿Eliminar la tarea "${ tarea.titulo }"?`)) return;
+        if (!this.view.confirmar(`¿Eliminar la tarea "${tarea.titulo}"?`)) return;
 
         this.tareas = this.tareas.filter(tarea => tarea.id !== tareaId);
         this.guardar();
@@ -80,7 +80,7 @@ export class TareaController {
             this.view.mostrarMensaje('No hay tareas completadas', 'error');
             return;
         }
-        if (!this.view.confirmar(`¿Eliminar ${ completadas } tarea(s) completada(s)?`)) return;
+        if (!this.view.confirmar(`¿Eliminar ${completadas} tarea(s) completada(s)?`)) return;
 
         this.tareas = this.tareas.filter(tarea => !tarea.completada);
         this.guardar();
@@ -92,8 +92,8 @@ export class TareaController {
     private obtenerTareasVisibles(): Tarea[] {
         return this.tareas.filter(tarea => {
             const coincideFiltro =
-                this.filtro === Filtros.Todas ||
-                (this.filtro === Filtros.Completadas) === tarea.completada;
+                this.filtro === FiltrosEstados.Todas ||
+                (this.filtro === FiltrosEstados.Completadas) === tarea.completada;
 
             return coincideFiltro && tarea.titulo.toLowerCase().includes(this.busqueda);
         });
@@ -105,6 +105,6 @@ export class TareaController {
     }
 
     private guardar(): void {
-        this.storage.guardar({ tareas: this.tareas, filtro: this.filtro });
+        this.storage.guardar({ tareas: this.tareas, filtroEstado: this.filtro });
     }
 }
