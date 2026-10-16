@@ -26,7 +26,7 @@ Live Server es una extensión de VS Code que levanta un servidor local para abri
 ```bash
 git clone https://github.com/AnderOrtiz/POE.git
 cd POE
-git checkout clase23
+git checkout clase24
 ```
 
 ## Cómo ejecutarlo
