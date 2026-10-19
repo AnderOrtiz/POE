@@ -129,21 +129,3 @@ const PESO_PRIORIDAD: Record<Prioridad, number> = {
     media: 1,
     baja: 2,
 };
-
-
-//  PROYECTO 1
-//  📝 Lista de Tareas - Actualización
-//  Base: Registro y listado de tareas con estado completada/pendiente.
-//  RF-01: Agregar fecha límite a cada tarea.
-//  RF-02: Agregar prioridad (alta/media/baja).
-//  RF-03: Editar tareas existentes.
-//  RF-06: Filtrar por estado y prioridad.
-//  RF-07: Ordenar por fecha o prioridad.
-//  RF-09: Mostrar contador de tareas pendientes.
-//  🏗️ Cambios en las clases
-
-//  Tarea añade: prioridad, fechaLimite
-//  TareaModel añade: updateTarea(), deleteTarea(), searchTareas(), filterTareas()
-//  TareaView añade: renderEditForm(), renderCounter()
-//  TareaController añade: handleUpdate(), handleDelete(), handleSearch()
-//  🎯 Reto adicional: Marcar tareas vencidas automáticamente con color rojo.

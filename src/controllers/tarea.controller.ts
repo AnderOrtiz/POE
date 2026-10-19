@@ -19,10 +19,10 @@ export class TareaController {
         this.view.onEliminar(tareaId => this.eliminar(tareaId));
         this.view.onToggle(tareaId => this.toggle(tareaId));
         this.view.onBuscar(texto => this.buscar(texto));
-        this.view.onFiltrar(filtro => this.filtrar(filtro));
+        this.view.onFiltrarEstado(filtro => this.filtrar(filtro));
         this.view.onBorrarCompletadas(() => this.borrarCompletadas());
 
-        this.view.marcarFiltro(this.filtro);
+        this.view.marcarFiltroEstado(this.filtro);
         this.mostrarTareas();
     }
 
@@ -70,7 +70,7 @@ export class TareaController {
         this.filtro = filtro;
         this.guardar();
 
-        this.view.marcarFiltro(filtro);
+        this.view.marcarFiltroEstado(filtro);
         this.mostrarTareas();
     }
 
@@ -101,7 +101,7 @@ export class TareaController {
 
     private mostrarTareas(): void {
         this.view.renderizar(this.obtenerTareasVisibles());
-        this.view.renderizarPendientes(this.tareas.filter(tarea => !tarea.completada).length);
+        this.view.renderCounter(this.tareas.filter(tarea => !tarea.completada).length);
     }
 
     private guardar(): void {
