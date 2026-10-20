@@ -1,7 +1,15 @@
-import { TareaModel, Ordenes, fechaDeHoy } from '../models/tarea.model.js';
+import { TareaModel, Ordenes, fechaDeHoy, LIMITES } from '../models/tarea.model.js';
 import type { Tarea, FiltroEstado, FiltroPrioridad, Orden, Prioridad, CambiosTarea } from '../models/tarea.model.js';
 import { StorageService } from '../services/storage.service.js';
-import { TareaView } from '../views/tarea.view.js';
+import { TareaView, type Vista } from '../views/tarea.view.js';
+
+interface DatosTarea {
+    titulo: string;
+    descripcion: string;
+    fechaLimite: string;
+}
+
+const FORMATO_FECHA = /^\d{4}-\d{2}-\d{2}$/;
 
 export class TareaController {
     private readonly model: TareaModel;
@@ -30,6 +38,7 @@ export class TareaController {
         this.view.onEditar(tareaId => this.editar(tareaId));
         this.view.onGuardarEdicion((tareaId, cambios) => this.handleUpdate(tareaId, cambios));
         this.view.onCancelarEdicion(() => this.cancelarEdicion());
+        this.view.onCambiarVista(vista => this.cambiarVista(vista));
 
         this.view.marcarFiltroEstado(this.filtroEstado);
         this.view.marcarFiltroPrioridad(this.filtroPrioridad);
@@ -37,16 +46,15 @@ export class TareaController {
     }
 
     public agregar(titulo: string, fechaLimite: string, prioridad: Prioridad, descripcion: string = ''): void {
-        if (titulo.trim().length === 0) {
-            this.view.mostrarMensaje('El título es obligatorio', 'error');
-            return;
-        }
-        if (fechaLimite < fechaDeHoy()) {
-            this.view.mostrarMensaje('La fecha límite no puede ser anterior a hoy', 'error');
+        const datos = { titulo: titulo.trim(), descripcion: descripcion.trim(), fechaLimite };
+
+        const error = this.validarTarea(datos);
+        if (error) {
+            this.view.mostrarMensaje(error, 'error');
             return;
         }
 
-        this.model.addTarea(titulo.trim(), fechaLimite, prioridad, descripcion.trim());
+        this.model.addTarea(datos.titulo, datos.fechaLimite, prioridad, datos.descripcion);
         this.guardar();
 
         this.view.limpiarFormulario();
@@ -121,25 +129,23 @@ export class TareaController {
     }
 
     public handleUpdate(tareaId: string, cambios: CambiosTarea): void {
-        const titulo = cambios.titulo?.trim() ?? '';
-        if (titulo.length === 0) {
-            this.view.mostrarMensaje('El título es obligatorio', 'error');
-            return;
-        }
-
-        // Una tarea ya vencida puede editarse sin cambiar su fecha, pero no moverse a otra fecha pasada
         const tarea = this.model.getTarea(tareaId);
-        const cambioFecha = cambios.fechaLimite !== undefined && cambios.fechaLimite !== tarea?.fechaLimite;
-        if (cambioFecha && cambios.fechaLimite! < fechaDeHoy()) {
-            this.view.mostrarMensaje('La fecha límite no puede ser anterior a hoy', 'error');
+        if (!tarea) return;
+
+        // Los campos que no vienen en los cambios conservan su valor actual
+        const datos = {
+            titulo: (cambios.titulo ?? tarea.titulo).trim(),
+            descripcion: (cambios.descripcion ?? tarea.descripcion).trim(),
+            fechaLimite: cambios.fechaLimite ?? tarea.fechaLimite,
+        };
+
+        const error = this.validarTarea(datos, tarea);
+        if (error) {
+            this.view.mostrarMensaje(error, 'error');
             return;
         }
 
-        this.model.updateTarea(tareaId, {
-            ...cambios,
-            titulo,
-            descripcion: cambios.descripcion?.trim(),
-        });
+        this.model.updateTarea(tareaId, { ...cambios, ...datos });
         this.guardar();
 
         this.view.mostrarMensaje('Tarea actualizada');
@@ -148,6 +154,30 @@ export class TareaController {
 
     public cancelarEdicion(): void {
         this.mostrarTareas();
+    }
+
+    public cambiarVista(vista: Vista): void {
+        this.view.mostrarVista(vista);
+    }
+
+    // Devuelve el mensaje de error, o null si los datos son válidos.
+    // Al editar se recibe la tarea original para no compararla consigo misma.
+    private validarTarea(datos: DatosTarea, original?: Tarea): string | null {
+        const { titulo, descripcion, fechaLimite } = datos;
+
+        if (titulo.length === 0) return 'El título es obligatorio';
+        if (titulo.length < LIMITES.TituloMin) return `El título debe tener al menos ${ LIMITES.TituloMin } caracteres`;
+        if (titulo.length > LIMITES.TituloMax) return `El título no puede superar los ${ LIMITES.TituloMax } caracteres`;
+        if (descripcion.length > LIMITES.DescripcionMax) return `La descripción no puede superar los ${ LIMITES.DescripcionMax } caracteres`;
+        if (this.model.existeTitulo(titulo, original?.id)) return `Ya existe una tarea llamada "${ titulo }"`;
+
+        if (!FORMATO_FECHA.test(fechaLimite)) return 'La fecha límite no tiene un formato válido';
+
+        // Una tarea ya vencida puede editarse sin cambiar su fecha, pero no moverse a otra fecha pasada
+        const cambioFecha = fechaLimite !== original?.fechaLimite;
+        if (cambioFecha && fechaLimite < fechaDeHoy()) return 'La fecha límite no puede ser anterior a hoy';
+
+        return null;
     }
 
     private obtenerTareasVisibles(): Tarea[] {
@@ -159,6 +189,7 @@ export class TareaController {
     private mostrarTareas(): void {
         this.view.renderizar(this.obtenerTareasVisibles());
         this.view.renderCounter(this.model.contarPendientes());
+        this.view.renderEstadisticas(this.model.getEstadisticas());
     }
 
     private guardar(): void {

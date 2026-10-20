@@ -1,9 +1,15 @@
 import { appTemplate } from './app.template.js'
-import { estaVencida, fechaDeHoy } from '../models/tarea.model.js';
-import type { FiltroEstado, Tarea, Orden, FiltroPrioridad, Prioridad, CambiosTarea } from '../models/tarea.model.js';
-
+import { estaVencida, fechaDeHoy, LIMITES } from '../models/tarea.model.js';
+import type { FiltroEstado, Tarea, Orden, FiltroPrioridad, Prioridad, CambiosTarea, Estadisticas } from '../models/tarea.model.js';
 
 export type TipoMensaje = 'exito' | 'error';
+
+export const Vistas = {
+    Tareas: 'tareas',
+    Resumen: 'resumen',
+} as const;
+
+export type Vista = typeof Vistas[keyof typeof Vistas];
 
 const ElementIDs = {
     Formulario: '#new-todo-form',
@@ -19,9 +25,11 @@ const ElementIDs = {
     OrdenSelect: '#sort-select',
     Pendientes: '#pending-count',
     BorrarCompletadas: '.clear-completed',
+    Tabs: '.tab',
+    VistaTareas: '#vista-tareas',
+    VistaResumen: '#vista-resumen',
+    Resumen: '.resumen',
 } as const;
-
-
 
 const DURACION_MENSAJE_MS = 3000;
 
@@ -39,6 +47,10 @@ export class TareaView {
     private readonly filtrosPrioridad: NodeListOf<HTMLButtonElement>;
     private readonly pendientes: HTMLElement;
     private readonly borrarCompletadasButton: HTMLButtonElement;
+    private readonly tabs: NodeListOf<HTMLButtonElement>;
+    private readonly vistaTareas: HTMLElement;
+    private readonly vistaResumen: HTMLElement;
+    private readonly resumen: HTMLElement;
 
     private mensajeTimeout?: number;
 
@@ -64,8 +76,16 @@ export class TareaView {
         this.ordenSelect = this.obtenerElemento(ElementIDs.OrdenSelect);
         this.filtrosPrioridad = document.querySelectorAll<HTMLButtonElement>(ElementIDs.FiltrosPrioridad);
 
+        this.tabs = document.querySelectorAll<HTMLButtonElement>(ElementIDs.Tabs);
+        this.vistaTareas = this.obtenerElemento(ElementIDs.VistaTareas);
+        this.vistaResumen = this.obtenerElemento(ElementIDs.VistaResumen);
+        this.resumen = this.obtenerElemento(ElementIDs.Resumen);
+
         // Deshabilita en el calendario las fechas anteriores a hoy
         this.fechaInput.min = fechaDeHoy();
+        // Impide escribir más caracteres de los permitidos
+        this.tituloInput.maxLength = LIMITES.TituloMax;
+        this.descripcionInput.maxLength = LIMITES.DescripcionMax;
     }
 
     public renderizar(tareas: Tarea[]): void {
@@ -106,6 +126,9 @@ export class TareaView {
                 </div>
             </form>`;
 
+        li.querySelector<HTMLInputElement>('[name="titulo"]')!.maxLength = LIMITES.TituloMax;
+        li.querySelector<HTMLInputElement>('[name="descripcion"]')!.maxLength = LIMITES.DescripcionMax;
+
         li.querySelector<HTMLInputElement>('[name="titulo"]')!.value = tarea.titulo;
         li.querySelector<HTMLInputElement>('[name="descripcion"]')!.value = tarea.descripcion;
         li.querySelector<HTMLInputElement>('[name="fechaLimite"]')!.value = tarea.fechaLimite;
@@ -115,6 +138,44 @@ export class TareaView {
 
     public renderCounter(cantidad: number): void {
         this.pendientes.textContent = `${cantidad}`;
+    }
+
+    public renderEstadisticas(estadisticas: Estadisticas): void {
+        const valores: Record<string, string> = {
+            total: `${ estadisticas.total }`,
+            pendientes: `${ estadisticas.pendientes }`,
+            completadas: `${ estadisticas.completadas }`,
+            vencidas: `${ estadisticas.vencidas }`,
+            porcentaje: `${ estadisticas.porcentajeCompletadas }%`,
+            alta: `${ estadisticas.porPrioridad.alta }`,
+            media: `${ estadisticas.porPrioridad.media }`,
+            baja: `${ estadisticas.porPrioridad.baja }`,
+        };
+
+        this.resumen.querySelectorAll<HTMLElement>('[data-stat]').forEach(el => {
+            el.textContent = valores[el.dataset.stat!] ?? '';
+        });
+
+        this.resumen.querySelector<HTMLElement>('.progreso-relleno')!.style.width = `${ estadisticas.porcentajeCompletadas }%`;
+    }
+
+    public mostrarVista(vista: Vista): void {
+        this.vistaTareas.classList.toggle('hidden', vista !== Vistas.Tareas);
+        this.vistaResumen.classList.toggle('hidden', vista !== Vistas.Resumen);
+
+        this.tabs.forEach(el => {
+            const seleccionada = el.dataset.vista === vista;
+            el.classList.toggle('selected', seleccionada);
+            el.setAttribute('aria-selected', `${ seleccionada }`);
+        });
+    }
+
+    public onCambiarVista(handler: (vista: Vista) => void): void {
+        this.tabs.forEach(el => {
+            el.addEventListener('click', () => {
+                handler(el.dataset.vista as Vista);
+            });
+        });
     }
 
     public marcarFiltroEstado(filtro: FiltroEstado): void {

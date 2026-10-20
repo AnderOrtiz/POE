@@ -1,6 +1,21 @@
 export type Prioridad = Exclude<FiltroPrioridad, 'todas'>
 export type CambiosTarea = Partial<Pick<Tarea, 'titulo' | 'prioridad' | 'descripcion' | 'fechaLimite'>>;
 
+export interface Estadisticas {
+    total: number;
+    completadas: number;
+    pendientes: number;
+    vencidas: number;
+    porcentajeCompletadas: number;
+    porPrioridad: Record<Prioridad, number>;
+}
+
+export const LIMITES = {
+    TituloMin: 3,
+    TituloMax: 60,
+    DescripcionMax: 200,
+} as const;
+
 export class Tarea {
     public id: string;
     public titulo: string;
@@ -85,6 +100,31 @@ export class TareaModel {
 
     public contarPendientes(): number {
         return this.tareas.filter(tarea => !tarea.completada).length;
+    }
+
+    // excluirId permite que, al editar, la tarea no se compare consigo misma
+    public existeTitulo(titulo: string, excluirId?: string): boolean {
+        const buscado = titulo.trim().toLowerCase();
+        return this.tareas.some(tarea => tarea.id !== excluirId && tarea.titulo.toLowerCase() === buscado);
+    }
+
+    public getEstadisticas(): Estadisticas {
+        const total = this.tareas.length;
+        const completadas = this.tareas.filter(tarea => tarea.completada).length;
+        const porPrioridad: Record<Prioridad, number> = { alta: 0, media: 0, baja: 0 };
+
+        for (const tarea of this.tareas) {
+            porPrioridad[tarea.prioridad]++;
+        }
+
+        return {
+            total,
+            completadas,
+            pendientes: total - completadas,
+            vencidas: this.tareas.filter(estaVencida).length,
+            porcentajeCompletadas: total === 0 ? 0 : Math.round(completadas / total * 100),
+            porPrioridad,
+        };
     }
 
     public sortTareas(orden: Orden, tareas: Tarea[] = this.tareas): Tarea[] {
