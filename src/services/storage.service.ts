@@ -16,7 +16,7 @@ export class StorageService {
     public cargar(): Estado {
         const estadoInicial: Estado = {
             tareas: [
-                new Tarea('Tarea de ejemplo', '2026-10-15', 'alta'),
+                new Tarea('Tarea de ejemplo', '2026-12-22', 'alta'),
             ],
             filtroEstado: FiltrosEstados.Todas,
             filtroPrioridad: FiltrosPrioridad.Todas,
