@@ -1,10 +1,13 @@
-import { FiltrosEstados, Tarea, type Filtro } from '../models/tarea.model.js';
+import { TareaModel, Ordenes } from '../models/tarea.model.js';
+import type { Tarea, FiltroEstado, FiltroPrioridad, Orden, Prioridad, CambiosTarea } from '../models/tarea.model.js';
 import { StorageService } from '../services/storage.service.js';
 import { TareaView } from '../views/tarea.view.js';
 
 export class TareaController {
-    private tareas: Tarea[];
-    private filtro: Filtro;
+    private readonly model: TareaModel;
+    private filtroEstado: FiltroEstado;
+    private filtroPrioridad: FiltroPrioridad;
+    private orden: Orden = Ordenes.Fecha;
     private busqueda: string = '';
 
     constructor(
@@ -12,27 +15,34 @@ export class TareaController {
         private readonly storage: StorageService,
     ) {
         const estado = this.storage.cargar();
-        this.tareas = estado.tareas;
-        this.filtro = estado.filtroEstado;
+        this.model = new TareaModel(estado.tareas);
+        this.filtroEstado = estado.filtroEstado;
+        this.filtroPrioridad = estado.filtroPrioridad;
 
-        this.view.onAgregar((titulo, descripcion) => this.agregar(titulo, descripcion));
-        this.view.onEliminar(tareaId => this.eliminar(tareaId));
+        this.view.onAgregar((titulo, fechaLimite, prioridad, descripcion) => this.agregar(titulo, fechaLimite, prioridad, descripcion));
+        this.view.onEliminar(tareaId => this.handleDelete(tareaId));
         this.view.onToggle(tareaId => this.toggle(tareaId));
-        this.view.onBuscar(texto => this.buscar(texto));
-        this.view.onFiltrarEstado(filtro => this.filtrar(filtro));
+        this.view.onBuscar(texto => this.handleSearch(texto));
+        this.view.onFiltrarEstado(filtro => this.filtrarEstado(filtro));
+        this.view.onFiltrarPrioridad(filtro => this.filtrarPrioridad(filtro));
+        this.view.onOrdenar(orden => this.ordenar(orden));
         this.view.onBorrarCompletadas(() => this.borrarCompletadas());
+        this.view.onEditar(tareaId => this.editar(tareaId));
+        this.view.onGuardarEdicion((tareaId, cambios) => this.handleUpdate(tareaId, cambios));
+        this.view.onCancelarEdicion(() => this.cancelarEdicion());
 
-        this.view.marcarFiltroEstado(this.filtro);
+        this.view.marcarFiltroEstado(this.filtroEstado);
+        this.view.marcarFiltroPrioridad(this.filtroPrioridad);
         this.mostrarTareas();
     }
 
-    public agregar(titulo: string, descripcion: string = ''): void {
+    public agregar(titulo: string, fechaLimite: string, prioridad: Prioridad, descripcion: string = ''): void {
         if (titulo.trim().length === 0) {
             this.view.mostrarMensaje('El título es obligatorio', 'error');
             return;
         }
 
-        this.tareas.push(new Tarea(titulo.trim(), descripcion.trim()));
+        this.model.addTarea(titulo.trim(), fechaLimite, prioridad, descripcion.trim());
         this.guardar();
 
         this.view.limpiarFormulario();
@@ -40,12 +50,12 @@ export class TareaController {
         this.mostrarTareas();
     }
 
-    public eliminar(tareaId: string): void {
-        const tarea = this.tareas.find(tarea => tarea.id === tareaId);
+    public handleDelete(tareaId: string): void {
+        const tarea = this.model.getTarea(tareaId);
         if (!tarea) return;
-        if (!this.view.confirmar(`¿Eliminar la tarea "${tarea.titulo}"?`)) return;
+        if (!this.view.confirmar(`¿Eliminar la tarea "${ tarea.titulo }"?`)) return;
 
-        this.tareas = this.tareas.filter(tarea => tarea.id !== tareaId);
+        this.model.deleteTarea(tareaId);
         this.guardar();
 
         this.view.mostrarMensaje('Tarea eliminada');
@@ -53,58 +63,97 @@ export class TareaController {
     }
 
     public toggle(tareaId: string): void {
-        const tarea = this.tareas.find(tarea => tarea.id === tareaId);
-        if (!tarea) return;
-
-        tarea.completada = !tarea.completada;
+        this.model.toggleTarea(tareaId);
         this.guardar();
         this.mostrarTareas();
     }
 
-    public buscar(texto: string): void {
-        this.busqueda = texto.trim().toLowerCase();
+    public handleSearch(texto: string): void {
+        this.busqueda = texto;
         this.mostrarTareas();
     }
 
-    public filtrar(filtro: Filtro): void {
-        this.filtro = filtro;
+    public filtrarEstado(filtro: FiltroEstado): void {
+        this.filtroEstado = filtro;
         this.guardar();
 
         this.view.marcarFiltroEstado(filtro);
         this.mostrarTareas();
     }
 
+    public filtrarPrioridad(filtro: FiltroPrioridad): void {
+        this.filtroPrioridad = filtro;
+        this.guardar();
+
+        this.view.marcarFiltroPrioridad(filtro);
+        this.mostrarTareas();
+    }
+
+    public ordenar(orden: Orden): void {
+        this.orden = orden;
+        this.mostrarTareas();
+    }
+
     public borrarCompletadas(): void {
-        const completadas = this.tareas.filter(tarea => tarea.completada).length;
+        const completadas = this.model.getTareas().filter(tarea => tarea.completada).length;
         if (completadas === 0) {
             this.view.mostrarMensaje('No hay tareas completadas', 'error');
             return;
         }
-        if (!this.view.confirmar(`¿Eliminar ${completadas} tarea(s) completada(s)?`)) return;
+        if (!this.view.confirmar(`¿Eliminar ${ completadas } tarea(s) completada(s)?`)) return;
 
-        this.tareas = this.tareas.filter(tarea => !tarea.completada);
+        this.model.deleteCompletadas();
         this.guardar();
 
         this.view.mostrarMensaje('Tareas completadas eliminadas');
         this.mostrarTareas();
     }
 
-    private obtenerTareasVisibles(): Tarea[] {
-        return this.tareas.filter(tarea => {
-            const coincideFiltro =
-                this.filtro === FiltrosEstados.Todas ||
-                (this.filtro === FiltrosEstados.Completadas) === tarea.completada;
+    public editar(tareaId: string): void {
+        const tarea = this.model.getTarea(tareaId);
+        if (!tarea) return;
 
-            return coincideFiltro && tarea.titulo.toLowerCase().includes(this.busqueda);
+        this.view.renderEditForm(tarea);
+    }
+
+    public handleUpdate(tareaId: string, cambios: CambiosTarea): void {
+        const titulo = cambios.titulo?.trim() ?? '';
+        if (titulo.length === 0) {
+            this.view.mostrarMensaje('El título es obligatorio', 'error');
+            return;
+        }
+
+        this.model.updateTarea(tareaId, {
+            ...cambios,
+            titulo,
+            descripcion: cambios.descripcion?.trim(),
         });
+        this.guardar();
+
+        this.view.mostrarMensaje('Tarea actualizada');
+        this.mostrarTareas();
+    }
+
+    public cancelarEdicion(): void {
+        this.mostrarTareas();
+    }
+
+    private obtenerTareasVisibles(): Tarea[] {
+        const encontradas = this.model.searchTareas(this.busqueda);
+        const filtradas = this.model.filterTareas(this.filtroEstado, this.filtroPrioridad, encontradas);
+        return this.model.sortTareas(this.orden, filtradas);
     }
 
     private mostrarTareas(): void {
         this.view.renderizar(this.obtenerTareasVisibles());
-        this.view.renderCounter(this.tareas.filter(tarea => !tarea.completada).length);
+        this.view.renderCounter(this.model.contarPendientes());
     }
 
     private guardar(): void {
-        this.storage.guardar({ tareas: this.tareas, filtroEstado: this.filtro });
+        this.storage.guardar({
+            tareas: this.model.getTareas(),
+            filtroEstado: this.filtroEstado,
+            filtroPrioridad: this.filtroPrioridad,
+        });
     }
 }

@@ -155,7 +155,7 @@ export class TareaView {
     public onGuardarEdicion(handler: (tareaId: string, cambios: CambiosTarea) => void): void {
         this.listaTareas.addEventListener('submit', (event: SubmitEvent) => {
             const form = event.target as HTMLFormElement;
-            if (!form.classList.contains('.todo-list')) return;
+            if (!form.classList.contains('edit-form')) return;
 
             event.preventDefault();
 
@@ -207,7 +207,7 @@ export class TareaView {
         });
     }
 
-    public onEditar(handler: (tareaID: string) => void): void {
+    public onEditar(handler: (tareaId: string) => void): void {
         this.listaTareas.addEventListener('click', (event: MouseEvent) => {
             const target = event.target as HTMLElement;
             if (!target.classList.contains('edit')) return;
@@ -289,7 +289,4 @@ export class TareaView {
         if (!element) throw new Error(`Element ${selector} not found`);
         return element;
     }
-
-
-
 }

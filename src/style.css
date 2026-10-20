@@ -9,9 +9,13 @@
 	--green: #8fe04a;
 	--green-dim: #5c9a2b;
 	--orange: #ff8a3d;
+	--red: #ff4d6d;
 	--text: #ece6f7;
 	--text-muted: #9a8bb5;
 	--radius: 14px;
+
+	/* Hace que el calendario y los desplegables nativos usen colores oscuros */
+	color-scheme: dark;
 }
 
 * {
@@ -34,12 +38,14 @@ body {
 }
 
 button,
-input {
+input,
+select {
 	font: inherit;
 	color: inherit;
 }
 
-button {
+button,
+select {
 	cursor: pointer;
 }
 
@@ -126,7 +132,14 @@ button {
 	gap: 6px;
 }
 
-.field span {
+.form-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 14px;
+}
+
+.field span,
+.sort span {
 	font-size: 12px;
 	font-weight: 600;
 	letter-spacing: 0.08em;
@@ -135,7 +148,11 @@ button {
 }
 
 .field input,
-.search-input {
+.field select,
+.search-input,
+.sort select,
+.edit-form input,
+.edit-form select {
 	width: 100%;
 	padding: 12px 14px;
 	border: 1px solid var(--border);
@@ -145,13 +162,18 @@ button {
 }
 
 .field input::placeholder,
-.search-input::placeholder {
+.search-input::placeholder,
+.edit-form input::placeholder {
 	color: var(--text-muted);
 	opacity: 0.7;
 }
 
 .field input:focus,
-.search-input:focus {
+.field select:focus,
+.search-input:focus,
+.sort select:focus,
+.edit-form input:focus,
+.edit-form select:focus {
 	outline: none;
 	border-color: var(--green);
 	box-shadow: 0 0 0 3px rgba(143, 224, 74, 0.2);
@@ -234,6 +256,22 @@ button {
 	background: var(--purple);
 }
 
+.sort {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.sort span {
+	flex-shrink: 0;
+}
+
+.sort select {
+	width: auto;
+	padding: 6px 12px;
+	font-size: 14px;
+}
+
 /* ===== Lista de tareas ===== */
 .todo-list {
 	margin: 0;
@@ -305,6 +343,65 @@ button {
 	opacity: 0.6;
 }
 
+/* Prioridad y fecha límite */
+.todo-list li label .prioridad,
+.todo-list li label .fecha {
+	display: inline-block;
+	margin-top: 8px;
+	font-size: 12px;
+}
+
+.todo-list li label .prioridad {
+	margin-right: 8px;
+	padding: 1px 10px;
+	border: 1px solid currentColor;
+	border-radius: 999px;
+	font-weight: 600;
+	text-transform: capitalize;
+}
+
+.todo-list li label .prioridad-alta {
+	color: var(--orange);
+}
+
+.todo-list li label .prioridad-media {
+	color: var(--purple-light);
+}
+
+.todo-list li label .prioridad-baja {
+	color: var(--green);
+}
+
+.todo-list li label .fecha {
+	color: var(--text-muted);
+}
+
+.todo-list li label .fecha::before {
+	content: '📅 ';
+}
+
+.todo-list li.completed label .prioridad,
+.todo-list li.completed label .fecha {
+	opacity: 0.6;
+}
+
+/* Tareas vencidas: pendientes con fecha límite anterior a hoy */
+.todo-list li.vencida {
+	box-shadow: inset 4px 0 0 var(--red);
+	background: rgba(255, 77, 109, 0.08);
+}
+
+.todo-list li.vencida label .titulo,
+.todo-list li.vencida label .fecha {
+	color: var(--red);
+}
+
+.todo-list li.vencida label .fecha::after {
+	content: ' · vencida';
+	font-weight: 600;
+}
+
+.todo-list li .edit,
 .todo-list li .destroy {
 	flex-shrink: 0;
 	width: 30px;
@@ -323,14 +420,78 @@ button {
 	content: '×';
 }
 
+.todo-list li .edit {
+	font-size: 18px;
+}
+
+.todo-list li:hover .edit,
+.todo-list li .edit:focus-visible,
 .todo-list li:hover .destroy,
 .todo-list li .destroy:focus-visible {
 	opacity: 1;
 }
 
+.todo-list li .edit:hover {
+	color: var(--purple-light);
+	background: rgba(123, 79, 196, 0.2);
+}
+
 .todo-list li .destroy:hover {
 	color: var(--orange);
 	background: rgba(255, 138, 61, 0.15);
+}
+
+/* Formulario de edición */
+.todo-list li:has(.edit-form) {
+	cursor: default;
+	background: var(--surface-alt);
+}
+
+.edit-form {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 16px 20px;
+}
+
+.edit-form input,
+.edit-form select {
+	padding: 10px 12px;
+}
+
+.edit-actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+}
+
+.edit-actions button {
+	padding: 8px 16px;
+	border: 1px solid var(--border);
+	border-radius: 10px;
+	font-size: 14px;
+	font-weight: 600;
+	background: transparent;
+	transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.edit-actions button[type="submit"] {
+	border-color: var(--green);
+	color: #14230a;
+	background: var(--green);
+}
+
+.edit-actions button[type="submit"]:hover {
+	background: #a4ee63;
+}
+
+.edit-actions .cancel-edit {
+	color: var(--text-muted);
+}
+
+.edit-actions .cancel-edit:hover {
+	color: var(--text);
+	border-color: var(--purple);
 }
 
 .todo-list li.vacio {
@@ -368,6 +529,7 @@ button {
 }
 
 @media (hover: none) {
+	.todo-list li .edit,
 	.todo-list li .destroy {
 		opacity: 1;
 	}
@@ -380,5 +542,9 @@ button {
 
 	.app-header h1 {
 		font-size: 36px;
+	}
+
+	.form-row {
+		grid-template-columns: 1fr;
 	}
 }
