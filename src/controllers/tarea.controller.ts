@@ -1,4 +1,4 @@
-import { TareaModel, Ordenes } from '../models/tarea.model.js';
+import { TareaModel, Ordenes, fechaDeHoy } from '../models/tarea.model.js';
 import type { Tarea, FiltroEstado, FiltroPrioridad, Orden, Prioridad, CambiosTarea } from '../models/tarea.model.js';
 import { StorageService } from '../services/storage.service.js';
 import { TareaView } from '../views/tarea.view.js';
@@ -39,6 +39,10 @@ export class TareaController {
     public agregar(titulo: string, fechaLimite: string, prioridad: Prioridad, descripcion: string = ''): void {
         if (titulo.trim().length === 0) {
             this.view.mostrarMensaje('El título es obligatorio', 'error');
+            return;
+        }
+        if (fechaLimite < fechaDeHoy()) {
+            this.view.mostrarMensaje('La fecha límite no puede ser anterior a hoy', 'error');
             return;
         }
 
@@ -120,6 +124,14 @@ export class TareaController {
         const titulo = cambios.titulo?.trim() ?? '';
         if (titulo.length === 0) {
             this.view.mostrarMensaje('El título es obligatorio', 'error');
+            return;
+        }
+
+        // Una tarea ya vencida puede editarse sin cambiar su fecha, pero no moverse a otra fecha pasada
+        const tarea = this.model.getTarea(tareaId);
+        const cambioFecha = cambios.fechaLimite !== undefined && cambios.fechaLimite !== tarea?.fechaLimite;
+        if (cambioFecha && cambios.fechaLimite! < fechaDeHoy()) {
+            this.view.mostrarMensaje('La fecha límite no puede ser anterior a hoy', 'error');
             return;
         }
 

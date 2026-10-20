@@ -129,3 +129,17 @@ const PESO_PRIORIDAD: Record<Prioridad, number> = {
     media: 1,
     baja: 2,
 };
+
+// Fecha de hoy en formato 'YYYY-MM-DD' con la hora local (toISOString usa UTC y puede dar el día siguiente)
+export function fechaDeHoy(): string {
+    const hoy = new Date();
+    const anio = hoy.getFullYear();
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const dia = String(hoy.getDate()).padStart(2, '0');
+    return `${ anio }-${ mes }-${ dia }`;
+}
+
+// Es una función y no un método porque las tareas cargadas de localStorage son objetos simples, no instancias de Tarea
+export function estaVencida(tarea: Tarea): boolean {
+    return !tarea.completada && tarea.fechaLimite < fechaDeHoy();
+}

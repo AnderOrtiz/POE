@@ -1,4 +1,5 @@
 import { appTemplate } from './app.template.js'
+import { estaVencida, fechaDeHoy } from '../models/tarea.model.js';
 import type { FiltroEstado, Tarea, Orden, FiltroPrioridad, Prioridad, CambiosTarea } from '../models/tarea.model.js';
 
 
@@ -62,6 +63,9 @@ export class TareaView {
         this.prioridadSelect = this.obtenerElemento(ElementIDs.PrioridadSelect);
         this.ordenSelect = this.obtenerElemento(ElementIDs.OrdenSelect);
         this.filtrosPrioridad = document.querySelectorAll<HTMLButtonElement>(ElementIDs.FiltrosPrioridad);
+
+        // Deshabilita en el calendario las fechas anteriores a hoy
+        this.fechaInput.min = fechaDeHoy();
     }
 
     public renderizar(tareas: Tarea[]): void {
@@ -250,6 +254,7 @@ export class TareaView {
         const liElement = document.createElement('li');
         liElement.setAttribute('data-id', tarea.id);
         if (tarea.completada) liElement.classList.add('completed');
+        if (estaVencida(tarea)) liElement.classList.add('vencida');
 
 
         liElement.innerHTML = `
