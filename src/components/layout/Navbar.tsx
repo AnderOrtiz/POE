@@ -3,6 +3,7 @@ import { MENU_PRINCIPAL } from "../../config/navigation";
 import { USUARIO_ACTUAL } from "../../features/auth/data/currentUser";
 
 export function Navbar() {
+  // const location = useLocation()
   return (
     <header className="bg-white border-b border-slate-200 sticky top-0 z-10">
       <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
