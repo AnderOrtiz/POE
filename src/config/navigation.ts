@@ -1,11 +1,12 @@
-export interface NavigationItem {
+export interface NavItem {
     id: string;
     label: string;
-    path: string;
+    href: string;
+    isActive?: boolean;
 }
 
-export const navigationItems: NavigationItem[] = [
-    { id: "tickets", label: "Tickets", path: "/tickets" },
-    { id: "new-ticket", label: "Nuevo Ticket", path: "/new-ticket" },
-    { id: "settings", label: "Configuración", path: "/settings" },
+export const MENU_PRINCIPAL: NavItem[] = [
+    { id: 'nav-tickets', label: 'Tickets', href: '#', isActive: true },
+    { id: 'nav-nuevo', label: 'Nuevo Ticket', href: '#' },
+    { id: 'nav-config', label: 'Configuración', href: '#' },
 ];

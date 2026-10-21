@@ -1,25 +1,21 @@
-import type { ReactNode } from "react";
-
-export type BadgeVariant = "neutral" | "info" | "success" | "warning";
-
 interface BadgeProps {
-    children: ReactNode;
-    variant?: BadgeVariant;
+  children: React.ReactNode;
+  variant?: 'default' | 'success' | 'warning' | 'danger';
 }
 
-const variantClasses: Record<BadgeVariant, string> = {
-    neutral: "bg-gray-100 text-gray-700",
-    info: "bg-blue-100 text-blue-700",
-    success: "bg-green-100 text-green-800",
-    warning: "bg-yellow-100 text-yellow-800",
-};
+export function Badge({ children, variant = 'default' }: BadgeProps) {
+  const baseStyle = "px-2 py-0.5 rounded text-xs font-semibold inline-flex items-center";
+  
+  const variants = {
+    default: "bg-slate-100 text-slate-700 border border-slate-200",
+    success: "bg-emerald-50 text-emerald-700 border border-emerald-200",
+    warning: "bg-amber-50 text-amber-700 border border-amber-200",
+    danger: "bg-rose-50 text-rose-700 border border-rose-200",
+  };
 
-export function Badge({ children, variant = "neutral" }: BadgeProps) {
-    return (
-        <span
-            className={`inline-block rounded px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${variantClasses[variant]}`}
-        >
-            {children}
-        </span>
-    );
+  return (
+    <span className={`${baseStyle} ${variants[variant]}`}>
+      {children}
+    </span>
+  );
 }
