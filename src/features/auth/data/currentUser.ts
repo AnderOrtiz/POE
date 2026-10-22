@@ -8,3 +8,4 @@ export const USUARIO_ACTUAL: UsuarioLogueado = {
   email: 'ander.ortiz@a.com',
   notificacionesPendientes: 20,
 };
+
