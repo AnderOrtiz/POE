@@ -1,28 +1,24 @@
 {
-  "name": "devdesk-app",
-  "private": true,
-  "version": "0.0.0",
+  "name": "poe",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/AnderOrtiz/POE#readme",
+  "bugs": {
+    "url": "https://github.com/AnderOrtiz/POE/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnderOrtiz/POE.git"
+  },
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "start": "tsx src/index.ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.3.3",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.4",
-    "tailwindcss": "^4.3.3"
-  },
-  "devDependencies": {
-    "@types/node": "^24.13.3",
-    "@types/react": "^19.2.18",
-    "@types/react-dom": "^19.2.7",
-    "@vitejs/plugin-react": "^6.1.1",
-    "oxlint": "^1.81.0",
-    "typescript": "~6.0.2",
-    "vite": "^8.3.0"
+    "typescript": "^7.0.2"
   }
 }
