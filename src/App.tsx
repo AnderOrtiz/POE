@@ -1,8 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Navbar } from "./components/layout/Navbar";
+import { TicketForm } from "./components/ui/TicketForm";
 
 const Bandeja = () => <div className="p-12 text-center text-slate-500 border-2 border-dashed border-slate-300 rounded-xl">Bandeja de Ticket</div>,
-  Formulario = () => <div className="p-12 text-center text-slate-500 border-2 border-dashed border-slate-300 rounded-xl">Mi perfil</div>,
+  // Formulario = () => <div className="p-12 text-center text-slate-500 border-2 border-dashed border-slate-300 rounded-xl">Mi perfil</div>,
   Perfil = () => <div className="p-12 text-center text-slate-500 border-2 border-dashed border-slate-300 rounded-xl">Nuevo Ticket</div>;
 
 
@@ -20,7 +21,7 @@ export default function App() {
           <Routes>
 
             <Route path="/" element={<Bandeja />} />
-            <Route path="/nuevo" element={<Formulario />} />
+            <Route path="/nuevo" element={<TicketForm />} />
             <Route path="/perfil" element={<Perfil />} />
 
           </Routes>
